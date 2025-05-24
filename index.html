@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tilín</title>
+  </head>
+  <body style="background: white; color: red; text-align: center; font-family: sans-serif;">
+    <h1>Bienvenida</h1>
+    <p>Toca la pantalla para continuar</p>
+    <script>
+      document.body.addEventListener("click", () => {
+        document.body.innerHTML = "";
+        document.body.style.background = "black";
+        let i = 0;
+        setInterval(() => {
+          const msg = document.createElement("div");
+          msg.textContent = "Te quiero";
+          msg.style.color = "pink";
+          msg.style.fontSize = "24px";
+          msg.style.position = "absolute";
+          msg.style.left = ${Math.random() * window.innerWidth}px;
+          msg.style.top = ${i * 20}px;
+          document.body.appendChild(msg);
+          i++;
+        }, 300);
+      });
+    </script>
+  </body>
+</html>
