@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bienvenida</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: sans-serif;
+      height: 100%;
+      width: 100%;
+    }
+
+    #pantalla-inicial {
+      background: white;
+      color: red;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+      transition: opacity 1s ease;
+    }
+
+    #mensaje {
+      font-size: 3em;
+      margin-bottom: 1em;
+    }
+
+    #submensaje {
+      font-size: 1.2em;
+    }
+
+    #pantalla-final {
+      display: none;
+      background: black;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div id="pantalla-inicial" onclick="cambiarPantalla()">
+  <div id="mensaje">Bienvenida</div>
+  <div id="submensaje">Toca la pantalla para continuar</div>
+</div>
+
+<div id="pantalla-final">
+  <canvas id="matrixCanvas"></canvas>
+</div>
+
+<script>
+  function cambiarPantalla() {
+    const inicio = document.getElementById('pantalla-inicial');
+    const final = document.getElementById('pantalla-final');
+    inicio.style.opacity = '0';
+    setTimeout(() => {
+      inicio.style.display = 'none';
+      final.style.display = 'block';
+      iniciarMatrix();
+    }, 1000);
+  }
+
+  function iniciarMatrix() {
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const frase = "Te quiero";
+    const fontSize = 18;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(0);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#ff69b4";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        ctx.fillText(frase, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 50);
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+</script>
+
+</body>
+</html>
